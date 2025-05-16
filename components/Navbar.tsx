@@ -5,8 +5,8 @@ import React from "react";
 const list = [
   { id: 1, name: "Home", link: "/" },
   { id: 2, name: "About", link: "/about" },
-  { id: 3, name: "Contact", link: "/contact" },
-  { id: 4, name: "Events", link: "/events" },
+  { id: 3, name: "Events", link: "/events" },
+  { id: 4, name: "My Events", link: "/myevents" },
 ];
 
 const Navbar = () => {
