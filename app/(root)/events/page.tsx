@@ -8,6 +8,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import EventCard from "@/components/EventCard";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import EventForm from "@/components/EventForm";
 
 const Events = () => {
   return (
@@ -36,9 +45,26 @@ const Events = () => {
               <DropdownMenuItem>Decending</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button size="lg" className="text-lg py-6 text-center cursor-pointer">
-            + Add Event
-          </Button>
+
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                size="lg"
+                className="text-lg py-6 text-center cursor-pointer"
+              >
+                + Add Event
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Add Event</DialogTitle>
+                <DialogDescription>
+                  Please fill in the following details to create a new event.
+                </DialogDescription>
+              </DialogHeader>
+              <EventForm />
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
