@@ -1,25 +1,43 @@
 import React from "react";
 import TypingText from "./animata/text/typing-text";
 import HomeButton from "./HomeButton";
+import Image from "next/image";
 
 const Homepage = () => {
   return (
-    <main>
-      <div className="h-96 flex flex-col justify-center items-center">
-        <TypingText
-          text={[
-            "_Create, discover, and manage events effortlessly.",
-            "_Your all-in-one event management dashboard.",
-            "_Where every event finds its audience.",
-            "_Simplify your event planning and stay connected.",
-            "_Organize. Share. Celebrate.",
-            "_Bringing people together, one event at a time.",
-            "_The easy way to manage and explore events.",
-          ]}
-          className="px-40"
+    <main className="py-32">
+      <div className="h-96 flex flex-row justify-center items-center px-52">
+        <div>
+          <Image
+            src="/assets/images/logo_full.png"
+            alt="logo"
+            width={300}
+            height={300}
+            className="object-contain pb-10"
+          />
+          <TypingText
+            text={[
+              "_Create, discover, and manage events effortlessly.",
+              "_Your all-in-one event management dashboard.",
+              "_Where every event finds its audience.",
+              "_Simplify your event planning and stay connected.",
+              "_Organize. Share. Celebrate.",
+              "_Bringing people together, one event at a time.",
+              "_The easy way to manage and explore events.",
+            ]}
+            className="px-40"
+          />
+        </div>
+
+        <Image
+          src="/assets/images/meeting.png"
+          alt="meeting"
+          width={500}
+          height={500}
+          className="object-contain"
         />
       </div>
-      <div className=" flex flex-col items-center justify-center">
+      <div className=" flex flex-col items-center justify-center pt-32">
         <HomeButton primaryColor="#3B82F6" className="cursor-pointer" />
       </div>
     </main>

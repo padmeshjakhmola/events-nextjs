@@ -11,8 +11,8 @@ const Navbar = () => {
         <Link href="/">
           <Image
             src="/assets/images/logo.png"
-            width={60}
-            height={60}
+            width={50}
+            height={50}
             alt="logo"
             className="object-contain hover:animate-spin transition-transform duration-700 cursor-pointer"
           />
