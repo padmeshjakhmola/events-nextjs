@@ -82,7 +82,7 @@
   --radius: 0.625rem;
 
   /* Base colors */
-  --background: oklch(0.10 0 0); /* #1E293B */
+  --background: oklch(0.10 0 0);
   --foreground: oklch(0.98 0.005 257.5); /* #F8FAFC (primary text) */
   --muted-foreground: oklch(0.75 0.03 257.5); /* #94A3B8 (secondary text) */
 
@@ -127,6 +127,7 @@
     @apply bg-background text-foreground;
   }
 }
+
 
 html,
 body {
