@@ -13,8 +13,17 @@ const EventCard = () => {
       <Card className="w-[350px] max-h-96 rounded-4xl overflow-hidden py-10">
         <CardHeader className="">
           <div className="px-4">
-          <CardTitle className="font-rubik font-light text-3xl h-[60px] line-clamp-2">
-              Swis Chalet
+            <CardTitle className="font-rubik font-light text-3xl h-[60px] line-clamp-2">
+              <div className="flex flex-row justify-between items-center">
+                <h1>Swis Chalet</h1>
+                <Image
+                  src="/assets/icons/delete.svg"
+                  alt="delete"
+                  width={30}
+                  height={30}
+                  className="object-contain cursor-pointer"
+                />
+              </div>
             </CardTitle>
             <CardDescription className="py-2 text-lg h-[100px] text-white/80 line-clamp-2">
               A cozy event where you can meet yourself and friends.
