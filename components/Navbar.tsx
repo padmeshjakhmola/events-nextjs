@@ -2,7 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const list = ["Home", "About", "Contact", "Login"];
+const list = [
+  { id: 1, name: "Home", link: "/" },
+  { id: 2, name: "About", link: "/about" },
+  { id: 3, name: "Contact", link: "/contact" },
+  { id: 4, name: "Events", link: "/events" },
+];
 
 const Navbar = () => {
   return (
@@ -19,12 +24,11 @@ const Navbar = () => {
         </Link>
 
         {list.map((allList) => (
-          <h1
-            className="text-xl relative cursor-pointer  before:content-[''] before:absolute before:left-0 before:-bottom-1 before:h-[2px] before:w-0 before:bg-[#3B82F6] before:transition-all before:duration-300 hover:before:w-full"
-            key={allList}
-          >
-            {allList}
-          </h1>
+          <Link href={allList.link} key={allList.id}>
+            <h1 className="text-xl relative cursor-pointer  before:content-[''] before:absolute before:left-0 before:-bottom-1 before:h-[2px] before:w-0 before:bg-[#3B82F6] before:transition-all before:duration-300 hover:before:w-full">
+              {allList.name}
+            </h1>
+          </Link>
         ))}
       </div>
     </nav>
