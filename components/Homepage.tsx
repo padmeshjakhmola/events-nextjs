@@ -2,6 +2,7 @@ import React from "react";
 import TypingText from "./animata/text/typing-text";
 import HomeButton from "./HomeButton";
 import Image from "next/image";
+import Link from "next/link";
 
 const Homepage = () => {
   return (
@@ -38,7 +39,9 @@ const Homepage = () => {
         />
       </div>
       <div className=" flex flex-col items-center justify-center pt-32">
-        <HomeButton primaryColor="#3B82F6" className="cursor-pointer" />
+        <Link href="/events">
+          <HomeButton primaryColor="#3B82F6" className="cursor-pointer" />
+        </Link>
       </div>
     </main>
   );
