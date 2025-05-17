@@ -118,7 +118,13 @@ const EventCard = ({
               height={20}
               className="invert"
             />
-            <span className="truncate text-sm">{date}</span>
+            <span className="truncate text-sm">
+              {new Date(date).toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <Image
