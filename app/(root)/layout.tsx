@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import { GlobalProvider } from "@/context/GlobalContext";
 import { cookies } from "next/headers";
 
 export default async function RootLayout({
@@ -9,9 +10,11 @@ export default async function RootLayout({
   const token = (await cookies()).get("token")?.value;
 
   return (
-    <main>
-      <Navbar token={token!} />
-      {children}
-    </main>
+    <GlobalProvider>
+      <main>
+        <Navbar token={token!} />
+        {children}
+      </main>
+    </GlobalProvider>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import EventCard from "./EventCard";
+import { useEventContext } from "@/context/GlobalContext";
 
 interface Events {
   id: string;
@@ -13,6 +14,8 @@ interface Events {
 
 const AllEvents = () => {
   const [events, setEvents] = useState<Events[]>([]);
+  const { trigger } = useEventContext();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,7 +32,7 @@ const AllEvents = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [trigger]);
 
   return (
     <div className="py-32 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-y-20 justify-items-center">

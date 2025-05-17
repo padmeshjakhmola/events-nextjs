@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/textarea";
 import MyDatePicker from "./MyDatePicker";
+import { useEventContext } from "@/context/GlobalContext";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -31,6 +32,9 @@ const formSchema = z.object({
 });
 
 const EventForm = () => {
+  const { refreshEvents } = useEventContext();
+
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,8 +60,6 @@ const EventForm = () => {
 
     const userDetails = await getUserDetails.json();
 
-    console.log("getUserDetailsgetUserDetails: ", userDetails.user.email);
-
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/events/create`,
 
@@ -80,6 +82,7 @@ const EventForm = () => {
     );
 
     await response.json();
+    refreshEvents()
   }
 
   return (
