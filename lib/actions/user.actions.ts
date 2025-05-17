@@ -1,3 +1,8 @@
+"use server";
+
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
 export const createAccount = async ({
   fullName,
   email,
@@ -23,19 +28,30 @@ export const createAccount = async ({
     }
   );
 
-  console.log("aaaaaaaaaaaa", response);
+  const data = await response.json();
 
   if (!response.ok) {
-    const errData = await response.json();
     return {
-      status: 400,
-      message: { "Unable to fetch request": errData },
+      status: response.status,
+      message: "Unable to login",
+      error: data,
     };
   }
 
+  (await cookies()).set("token", data.token, {
+    httpOnly: true,
+    // secure: process.env.NODE_ENV === "production",
+    secure: true,
+    maxAge: 60 * 60 * 24,
+    path: "/",
+    sameSite: "lax",
+  });
+
   return {
     status: 200,
-    message: "User logged in successfully",
+    message: "User created successfully",
+    user: data.user,
+    token: data.token,
   };
 };
 
@@ -61,16 +77,40 @@ export const signInUser = async ({
     }
   );
 
+  const data = await response.json();
+
   if (!response.ok) {
-    const errData = await response.json();
     return {
-      status: 400,
-      message: { "Unable to Login": errData },
+      status: response.status,
+      message: "Unable to login",
+      error: data,
     };
   }
+
+  (await cookies()).set("token", data.token, {
+    httpOnly: true,
+    // secure: process.env.NODE_ENV === "production",
+    secure: true,
+    maxAge: 60 * 60 * 24,
+    path: "/",
+    sameSite: "lax",
+  });
 
   return {
     status: 200,
     message: "User logged in successfully",
+    user: data.user,
+    token: data.token,
   };
+};
+
+export const logout = async () => {
+  const cookieStore = cookies();
+  (await cookieStore).set("token", "", {
+    httpOnly: true,
+    path: "/",
+    expires: new Date(0),
+  });
+
+  redirect("/");
 };

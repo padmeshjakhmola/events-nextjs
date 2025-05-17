@@ -1,8 +1,16 @@
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = async ({ children }: { children: React.ReactNode }) => {
+  const token = (await cookies()).get("token")?.value;
+
+  if (token) {
+    redirect("/");
+  }
+
   return (
     <div className="flex min-h-screen">
       <section className="hidden w-1/2 items-center justify-center bg-[#121212] p-10 lg:flex xl:w-2/5">
@@ -18,9 +26,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </Link>
           <div className="space-y-5">
             <h1 className="h1 font-rubik">Express, Explore, Engage</h1>
-            <p className="h3">
-              Your all-in-one event management dashboard.
-            </p>
+            <p className="h3">Your all-in-one event management dashboard.</p>
           </div>
           <Image
             src="/assets/images/calendar.png"
