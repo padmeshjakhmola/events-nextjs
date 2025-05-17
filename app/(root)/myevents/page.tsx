@@ -52,6 +52,9 @@ export default function MyEvents() {
   const [openTextAreas, setOpenTextAreas] = useState<TextAreasState>({});
   const [user, setUser] = useState<User | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
+  const [cancelReasons, setCancelReasons] = useState<{ [key: string]: string }>(
+    {}
+  );
 
   // Fetch current user
   useEffect(() => {
@@ -89,11 +92,52 @@ export default function MyEvents() {
     fetchData();
   }, []);
 
-  const handleSubmit = (userId: number): void => {
-    setOpenTextAreas((prev) => ({
-      ...prev,
-      [userId]: !prev[userId],
-    }));
+  const handleSubmit = async (attendee: Attendee, eventId: string) => {
+    if (!cancelReasons[attendee.id]) return alert("Please provide a reason.");
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/events/${eventId}/cancle`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            user_id: attendee.id,
+            reason: cancelReasons[attendee.id],
+          }),
+        }
+      );
+
+      const result = await response.json();
+      if (result.message === "attendee_cancelled") {
+        // Update local event state to mark the attendee as cancelled
+        setEvents((prevEvents) =>
+          prevEvents.map((event) =>
+            event.id === eventId
+              ? {
+                  ...event,
+                  attendees: event.attendees.map((a) =>
+                    a.id === attendee.id
+                      ? {
+                          ...a,
+                          is_cancelled: true,
+                          cancellation_reason: cancelReasons[attendee.id],
+                        }
+                      : a
+                  ),
+                }
+              : event
+          )
+        );
+        setOpenTextAreas((prev) => ({ ...prev, [attendee.id]: false }));
+        setCancelReasons((prev) => ({ ...prev, [attendee.id]: "" }));
+      }
+    } catch (error) {
+      console.error("Cancellation error:", error);
+    }
   };
 
   if (!user) return <p className="text-center mt-20">Loading your events...</p>;
@@ -159,16 +203,32 @@ export default function MyEvents() {
                                 {!attendee.is_cancelled &&
                                   openTextAreas[attendee.id] && (
                                     <div className="mb-2">
-                                      <Textarea placeholder="Reason for cancellation" />
+                                      <Textarea
+                                        placeholder="Reason for cancellation"
+                                        value={cancelReasons[attendee.id] || ""}
+                                        onChange={(e) =>
+                                          setCancelReasons((prev) => ({
+                                            ...prev,
+                                            [attendee.id]: e.target.value,
+                                          }))
+                                        }
+                                      />
                                     </div>
                                   )}
                                 {!attendee.is_cancelled && (
                                   <Button
-                                    type="submit"
+                                    type="button"
                                     variant="destructive"
-                                    onClick={() =>
-                                      handleSubmit(Number(attendee.id))
-                                    }
+                                    onClick={() => {
+                                      if (openTextAreas[attendee.id]) {
+                                        handleSubmit(attendee, event.id);
+                                      } else {
+                                        setOpenTextAreas((prev) => ({
+                                          ...prev,
+                                          [attendee.id]: true,
+                                        }));
+                                      }
+                                    }}
                                   >
                                     {openTextAreas[attendee.id]
                                       ? "Submit"
@@ -177,7 +237,7 @@ export default function MyEvents() {
                                 )}
                                 {attendee.is_cancelled && (
                                   <span className="text-sm text-gray-500">
-                                    Cancelled
+                                    Cancelled: {attendee.cancellation_reason}
                                   </span>
                                 )}
                               </TableCell>
