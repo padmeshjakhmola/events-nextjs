@@ -44,7 +44,7 @@ export const createAccount = async ({
     secure: true,
     maxAge: 60 * 60 * 24,
     path: "/",
-    sameSite: "lax",
+    sameSite: "none",
   });
 
   return {
@@ -93,7 +93,7 @@ export const signInUser = async ({
     secure: true,
     maxAge: 60 * 60 * 24,
     path: "/",
-    sameSite: "lax",
+    sameSite: "none",
   });
 
   return {
