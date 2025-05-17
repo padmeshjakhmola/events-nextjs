@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -22,65 +22,72 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 
-interface TextAreasState {
-  [key: number]: boolean;
+interface Event {
+  id: string;
+  name: string;
+  description: string;
+  owner: string;
+  owner_name: string;
+  attendees: Attendee[];
 }
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+interface Attendee {
+  id: string;
+  fullname: string;
+  email: string;
+  is_cancelled: boolean;
+  cancellation_reason: string | null;
+}
 
-const users = [
-  { id: 1, name: "Prank" },
-  { id: 2, name: "Shadow" },
-  { id: 3, name: "Random" },
-  { id: 4, name: "Person" },
-];
+interface User {
+  id: string;
+  name: string;
+}
+
+interface TextAreasState {
+  [key: string]: boolean;
+}
 
 export default function MyEvents() {
-  // Track the open text area state for each user individually with their ID
   const [openTextAreas, setOpenTextAreas] = useState<TextAreasState>({});
+  const [user, setUser] = useState<User | null>(null);
+  const [events, setEvents] = useState<Event[]>([]);
+
+  // Fetch current user
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/me`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      const data = await res.json();
+      setUser(data.user);
+    };
+
+    fetchUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/events`,
+          {
+            credentials: "include",
+          }
+        );
+        const data = await response.json();
+
+        setEvents(data);
+      } catch (error) {
+        console.error("fetching_error:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleSubmit = (userId: number): void => {
     setOpenTextAreas((prev) => ({
@@ -89,86 +96,105 @@ export default function MyEvents() {
     }));
   };
 
+  if (!user) return <p className="text-center mt-20">Loading your events...</p>;
+
+  const myEvents = events.filter((event) => event.owner === user.id);
+
   return (
     <div className="py-32 px-28">
       <h1 className="text-4xl font-semibold select-none pb-16">
         My Created Events:
       </h1>
-      <Table className="text-lg">
-        <TableCaption>Your all event details</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]">Id</TableHead>
-            <TableHead>Title</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead className="text-right">Users attending event</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell className="text-right">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button className="cursor-pointer">Show all users</Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                      <DialogTitle>All User Info</DialogTitle>
-                      <DialogDescription>
-                        The list of users attending this event.
-                      </DialogDescription>
-                    </DialogHeader>
 
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-[100px]">User</TableHead>
-                          <TableHead className="text-right">
-                            Registration
-                          </TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {users.map((user) => (
-                          <TableRow key={user.id}>
-                            <TableCell>{user.name}</TableCell>
-                            <TableCell className="text-right space-x-2">
-                              {openTextAreas[user.id] && (
-                                <div className="mb-2">
-                                  <Textarea placeholder="Reason for cancellation" />
-                                </div>
-                              )}
-
-                              <Button
-                                type="submit"
-                                variant="destructive"
-                                className="cursor-pointer"
-                                onClick={() => handleSubmit(user.id)}
-                              >
-                                {openTextAreas[user.id]
-                                  ? "Submit"
-                                  : "Cancel Registration"}
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-
-                    <DialogFooter />
-                  </DialogContent>
-                </Dialog>
-              </TableCell>
+      {myEvents.length === 0 ? (
+        <p className="text-xl text-gray-400">
+          You have not created any events yet.
+        </p>
+      ) : (
+        <Table className="text-lg">
+          <TableCaption>Your all event details</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Id</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead className="text-right">
+                Users attending event
+              </TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-        </TableFooter>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {myEvents.map((event) => (
+              <TableRow key={event.id}>
+                <TableCell className="font-medium">{event.id}</TableCell>
+                <TableCell>{event.name}</TableCell>
+                <TableCell>{event.description}</TableCell>
+                <TableCell className="text-right">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button className="cursor-pointer">Show all users</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[600px]">
+                      <DialogHeader>
+                        <DialogTitle>All User Info</DialogTitle>
+                        <DialogDescription>
+                          Users attending: <strong>{event.name}</strong>
+                        </DialogDescription>
+                      </DialogHeader>
+
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="w-[100px]">User</TableHead>
+                            <TableHead className="text-right">
+                              Registration
+                            </TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {event.attendees.map((attendee) => (
+                            <TableRow key={attendee.id}>
+                              <TableCell>{attendee.fullname}</TableCell>
+                              <TableCell className="text-right space-x-2">
+                                {!attendee.is_cancelled &&
+                                  openTextAreas[attendee.id] && (
+                                    <div className="mb-2">
+                                      <Textarea placeholder="Reason for cancellation" />
+                                    </div>
+                                  )}
+                                {!attendee.is_cancelled && (
+                                  <Button
+                                    type="submit"
+                                    variant="destructive"
+                                    onClick={() =>
+                                      handleSubmit(Number(attendee.id))
+                                    }
+                                  >
+                                    {openTextAreas[attendee.id]
+                                      ? "Submit"
+                                      : "Cancel Registration"}
+                                  </Button>
+                                )}
+                                {attendee.is_cancelled && (
+                                  <span className="text-sm text-gray-500">
+                                    Cancelled
+                                  </span>
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+
+                      <DialogFooter />
+                    </DialogContent>
+                  </Dialog>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </div>
   );
 }
