@@ -146,6 +146,10 @@ const EventCard = ({
           <p className="text-green-400 text-center mt-4 font-medium">
             You are already attending 🎉
           </p>
+        ) : attendees.some((a) => a.id === userId && a.is_cancelled) ? (
+          <p className="text-red-400 text-center mt-4 font-medium">
+            Canceled by owner ❌
+          </p>
         ) : (
           <Button className="w-full mt-4" onClick={handleClick}>
             Attend Event
