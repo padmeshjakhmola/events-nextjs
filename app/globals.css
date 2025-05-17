@@ -41,6 +41,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  
+  --color-brand: #e8efff;
+  --color-brand-dark: #4374fa;
 }
 
 /* :root {
@@ -82,7 +85,7 @@
   --radius: 0.625rem;
 
   /* Base colors */
-  --background: oklch(0.10 0 0);
+  --background: oklch(0.1 0 0);
   --foreground: oklch(0.98 0.005 257.5); /* #F8FAFC (primary text) */
   --muted-foreground: oklch(0.75 0.03 257.5); /* #94A3B8 (secondary text) */
 
@@ -117,6 +120,7 @@
   --sidebar-accent-foreground: var(--primary-foreground);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--ring);
+
 }
 
 @layer base {
@@ -128,8 +132,34 @@
   }
 }
 
-
 html,
 body {
   font-family: var(--font-poppins), sans-serif;
+}
+
+@layer utilities {
+  .h1 {
+    @apply text-[34px] leading-[42px] font-bold;
+  }
+  .h2 {
+    @apply text-[24px] leading-[36px] font-bold;
+  }
+  .h3 {
+    @apply text-[20px] leading-[28px] font-semibold;
+  }
+  .h4 {
+    @apply text-[18px] leading-[20px] font-medium;
+  }
+  .h5 {
+    @apply text-[16px] leading-[24px] font-semibold;
+  }
+  .subtitle-1 {
+    @apply text-[16px] leading-[24px] font-medium;
+  }
+  .subtitle-2 {
+    @apply text-[14px] leading-[20px] font-semibold;
+  }
+    .shad-no-focus {
+    @apply outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0;
+  }
 }

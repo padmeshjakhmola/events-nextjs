@@ -30,6 +30,11 @@ const Navbar = () => {
             </h1>
           </Link>
         ))}
+        <Link href="/sign-up">
+          <h1 className="text-xl text-primary relative cursor-pointer  before:content-[''] before:absolute before:left-0 before:-bottom-1 before:h-[2px] before:w-0 before:bg-[#efda20] before:transition-all before:duration-300 hover:before:w-full">
+            Sign Up
+          </h1>
+        </Link>
       </div>
     </nav>
   );
