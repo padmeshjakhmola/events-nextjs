@@ -1,6 +1,9 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { Button } from "./ui/button";
+import { logout } from "@/lib/actions/user.actions";
 
 const list = [
   { id: 1, name: "Home", link: "/" },
@@ -9,7 +12,10 @@ const list = [
   { id: 4, name: "My Events", link: "/myevents" },
 ];
 
-const Navbar = () => {
+const Navbar = ({ token }: { token: string }) => {
+  const handleClick = async () => {
+    await logout();
+  };
   return (
     <nav className="flex flex-col justify-center items-center w-full pt-12 text-black">
       <div className="w-1/3 bg-white rounded-full flex flex-row justify-between items-center pr-10  shadow-2xl/60 shadow-primary">
@@ -30,11 +36,25 @@ const Navbar = () => {
             </h1>
           </Link>
         ))}
-        <Link href="/sign-up">
-          <h1 className="text-xl text-primary relative cursor-pointer  before:content-[''] before:absolute before:left-0 before:-bottom-1 before:h-[2px] before:w-0 before:bg-[#efda20] before:transition-all before:duration-300 hover:before:w-full">
-            Sign Up
-          </h1>
-        </Link>
+        <Button
+          variant="link"
+          className="hover:no-underline p-0 m-0 bg-transparent inline-flex items-center"
+          onClick={token ? handleClick : undefined}
+        >
+          {token ? (
+            <Link href="/">
+              <h1 className="text-xl text-destructive font-bold relative cursor-pointer  before:content-[''] before:absolute before:left-0 before:-bottom-1 before:h-[2px] before:w-0 before:bg-[#efda20] before:transition-all before:duration-300 hover:before:w-full">
+                logout
+              </h1>
+            </Link>
+          ) : (
+            <Link href="/sign-in">
+              <h1 className="text-xl text-primary relative cursor-pointer  before:content-[''] before:absolute before:left-0 before:-bottom-1 before:h-[2px] before:w-0 before:bg-[#efda20] before:transition-all before:duration-300 hover:before:w-full">
+                Sign In
+              </h1>
+            </Link>
+          )}
+        </Button>
       </div>
     </nav>
   );
