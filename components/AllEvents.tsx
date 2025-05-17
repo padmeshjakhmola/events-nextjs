@@ -17,9 +17,12 @@ const AllEvents = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/events`
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/events`,
+          {
+            credentials: "include",
+          }
         );
-        const data = await response.json();        
+        const data = await response.json();
         setEvents(data);
       } catch (error) {
         console.error("fetching_error:", error);

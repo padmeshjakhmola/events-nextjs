@@ -31,7 +31,6 @@ const formSchema = z.object({
 });
 
 const EventForm = () => {
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,9 +41,45 @@ const EventForm = () => {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("form_values", values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const getUserDetails = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/me`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        credentials: "include",
+      }
+    );
+
+    const userDetails = await getUserDetails.json();
+
+    console.log("getUserDetailsgetUserDetails: ", userDetails.user.email);
+
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/events/create`,
+
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        credentials: "include",
+
+        body: JSON.stringify({
+          name: values.title,
+          description: values.description,
+          date: values.date,
+          location: values.location,
+          owner_email: userDetails.user.email,
+        }),
+      }
+    );
+
+    await response.json();
   }
 
   return (
@@ -96,7 +131,7 @@ const EventForm = () => {
             <FormItem>
               <FormLabel>Location</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="Location" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

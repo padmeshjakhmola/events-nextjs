@@ -18,7 +18,7 @@ import {
 import EventForm from "@/components/EventForm";
 import AllEvents from "@/components/AllEvents";
 
-const Events = () => {
+const Events = async () => {
   return (
     <div className="py-32 px-28">
       <div className="flex flex-row justify-between items-center">
