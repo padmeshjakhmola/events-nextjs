@@ -25,13 +25,15 @@ const Events = () => {
   return (
     <div className="py-32 px-28">
       <div className="flex flex-row justify-between items-center">
-        <h1 className="text-4xl font-semibold select-none">My Events</h1>
-        <div className="space-x-4">
+        <h1 className="text-2xl lg:text-4xl text-center font-semibold select-none">
+          My Events
+        </h1>
+        <div className="space-x-4 flex">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 size="lg"
-                className="text-lg py-6 text-center cursor-pointer select-none bg-[#334155] hover:bg-gray-600"
+                className="hidden lg:flex text-lg py-6 text-center cursor-pointer select-none bg-[#334155] hover:bg-gray-600"
               >
                 Sort By
                 <Image

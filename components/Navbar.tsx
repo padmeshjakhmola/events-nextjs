@@ -7,7 +7,7 @@ import { logout } from "@/lib/actions/user.actions";
 
 const list = [
   { id: 1, name: "Home", link: "/" },
-  { id: 2, name: "About", link: "/about" },
+  // { id: 2, name: "About", link: "/about" },
   { id: 3, name: "Events", link: "/events" },
   { id: 4, name: "My Events", link: "/myevents" },
 ];
@@ -18,7 +18,7 @@ const Navbar = ({ token }: { token: string }) => {
   };
   return (
     <nav className="flex flex-col justify-center items-center w-full pt-12 text-black">
-      <div className="w-1/3 bg-white rounded-full flex flex-row justify-between items-center pr-10  shadow-2xl/60 shadow-primary">
+      <div className="w-[400px] lg:w-[500px] bg-white rounded-full flex flex-row justify-between items-center pr-10  shadow-2xl/60 shadow-primary">
         <Link href="/">
           <Image
             src="/assets/images/logo.png"
@@ -31,7 +31,7 @@ const Navbar = ({ token }: { token: string }) => {
 
         {list.map((allList) => (
           <Link href={allList.link} key={allList.id}>
-            <h1 className="text-xl relative cursor-pointer  before:content-[''] before:absolute before:left-0 before:-bottom-1 before:h-[2px] before:w-0 before:bg-[#3B82F6] before:transition-all before:duration-300 hover:before:w-full">
+            <h1 className="text-sm md:text-md relative cursor-pointer  before:content-[''] before:absolute before:left-0 before:-bottom-1 before:h-[2px] before:w-0 before:bg-[#3B82F6] before:transition-all before:duration-300 hover:before:w-full">
               {allList.name}
             </h1>
           </Link>
@@ -43,13 +43,13 @@ const Navbar = ({ token }: { token: string }) => {
         >
           {token ? (
             <Link href="/">
-              <h1 className="text-xl text-destructive font-bold relative cursor-pointer  before:content-[''] before:absolute before:left-0 before:-bottom-1 before:h-[2px] before:w-0 before:bg-[#efda20] before:transition-all before:duration-300 hover:before:w-full">
+              <h1 className="text-sm md:text-md text-destructive font-bold relative cursor-pointer  before:content-[''] before:absolute before:left-0 before:-bottom-1 before:h-[2px] before:w-0 before:bg-[#efda20] before:transition-all before:duration-300 hover:before:w-full">
                 logout
               </h1>
             </Link>
           ) : (
             <Link href="/sign-in">
-              <h1 className="text-xl text-primary relative cursor-pointer  before:content-[''] before:absolute before:left-0 before:-bottom-1 before:h-[2px] before:w-0 before:bg-[#efda20] before:transition-all before:duration-300 hover:before:w-full">
+              <h1 className="text-md text-primary relative cursor-pointer  before:content-[''] before:absolute before:left-0 before:-bottom-1 before:h-[2px] before:w-0 before:bg-[#efda20] before:transition-all before:duration-300 hover:before:w-full">
                 Sign In
               </h1>
             </Link>

@@ -7,7 +7,7 @@ interface SlideArrowButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEle
 }
 
 export default function HomeButton({
-  text = "Get Started",
+  text = "Add Event",
   primaryColor = "#6f3cff",
   className = "",
   ...props

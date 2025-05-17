@@ -26,7 +26,7 @@ const Homepage = () => {
               "_Bringing people together, one event at a time.",
               "_The easy way to manage and explore events.",
             ]}
-            className="px-40"
+            className="lg:px-40 text-2xl lg:text-5xl"
           />
         </div>
 
@@ -35,7 +35,7 @@ const Homepage = () => {
           alt="meeting"
           width={500}
           height={500}
-          className="object-contain"
+          className="hidden md:flex object-contain"
         />
       </div>
       <div className=" flex flex-col items-center justify-center pt-32">
