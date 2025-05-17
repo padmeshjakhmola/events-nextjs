@@ -52,7 +52,6 @@ const EventForm = ({ closeDialog }: EventFormProps) => {
     const getUserDetails = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/me`,
       {
-        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },

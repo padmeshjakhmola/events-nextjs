@@ -58,11 +58,10 @@ export default function MyEvents() {
     {}
   );
 
-  // Fetch current user
   useEffect(() => {
     const fetchUser = async () => {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/me`, {
-        method: "POST",
+        // method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
