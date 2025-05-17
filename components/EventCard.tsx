@@ -24,7 +24,9 @@ const EventCard = ({
   description,
   location,
   owner,
+  owner_id,
   attendees,
+  onDelete,
 }: {
   id: string;
   name: string;
@@ -32,7 +34,9 @@ const EventCard = ({
   description: string;
   location: string;
   owner: string | null;
+  owner_id: string | null;
   attendees: Attendee[];
+  onDelete?: (id: string) => void; // <-- add this
 }) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [hasApplied, setHasApplied] = useState(false);
@@ -68,6 +72,8 @@ const EventCard = ({
     fetchUserAndCheck();
   }, [attendees]);
 
+  const isOwner = userId === owner_id;
+
   const handleClick = async () => {
     if (!userId) return;
 
@@ -89,6 +95,30 @@ const EventCard = ({
     setHasApplied(true);
   };
 
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/events/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to delete event");
+      }
+
+      alert("Event deleted successfully!");
+      onDelete?.(id);
+    } catch (error) {
+      console.error("Error deleting event:", error);
+      alert("Failed to delete event.");
+    }
+  };
+
   return (
     <Card className="w-[350px] rounded-3xl overflow-hidden bg-white/5 backdrop-blur-md border border-white/10 text-white">
       <CardHeader className="p-6 space-y-4">
@@ -96,13 +126,16 @@ const EventCard = ({
           <CardTitle className="font-rubik text-2xl font-light leading-tight line-clamp-2 pr-2">
             {name}
           </CardTitle>
-          <Image
-            src="/assets/icons/delete.svg"
-            alt="delete"
-            width={24}
-            height={24}
-            className="cursor-pointer"
-          />
+          {isOwner && (
+            <Image
+              src="/assets/icons/delete.svg"
+              alt="delete"
+              width={24}
+              height={24}
+              className="cursor-pointer"
+              onClick={handleDelete}
+            />
+          )}
         </div>
 
         <CardDescription className="text-white/80 text-base line-clamp-3">

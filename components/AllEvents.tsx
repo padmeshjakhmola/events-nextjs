@@ -17,6 +17,7 @@ interface Events {
   location: string;
   name: string;
   owner_name: string | null;
+  owner: string | null;
   attendees: Attendee[];
 }
 
@@ -55,6 +56,10 @@ const AllEvents = () => {
             location={event.location}
             name={event.name}
             owner={event.owner_name ?? null}
+            owner_id={event.owner ?? null}
+            onDelete={(id) =>
+              setEvents((prev) => prev.filter((event) => event.id !== id))
+            }
           />
         </div>
       ))}
