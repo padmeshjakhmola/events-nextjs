@@ -3,6 +3,13 @@ import React, { useEffect, useState } from "react";
 import EventCard from "./EventCard";
 import { useEventContext } from "@/context/GlobalContext";
 
+interface Attendee {
+  id: string;
+  fullname: string;
+  email: string;
+  is_cancelled: boolean;
+  cancellation_reason: string | null;
+}
 interface Events {
   id: string;
   date: string;
@@ -10,6 +17,7 @@ interface Events {
   location: string;
   name: string;
   owner_name: string | null;
+  attendees: Attendee[];
 }
 
 const AllEvents = () => {
@@ -26,6 +34,7 @@ const AllEvents = () => {
           }
         );
         const data = await response.json();
+
         setEvents(data);
       } catch (error) {
         console.error("fetching_error:", error);
@@ -39,6 +48,8 @@ const AllEvents = () => {
       {events.map((event) => (
         <div key={event.id}>
           <EventCard
+            attendees={event.attendees}
+            id={event.id}
             date={event.date}
             description={event.description}
             location={event.location}

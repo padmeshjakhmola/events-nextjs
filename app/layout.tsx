@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins, Rubik } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const rubik = Rubik({
@@ -27,6 +28,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${rubik.variable} ${poppins.variable} antialiased`}>
         {children}
+        <Toaster richColors />
       </body>
     </html>
   );
