@@ -21,6 +21,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "next/navigation";
 
 interface Event {
   id: string;
@@ -49,6 +50,7 @@ interface TextAreasState {
 }
 
 export default function MyEvents() {
+  const router = useRouter();
   const [openTextAreas, setOpenTextAreas] = useState<TextAreasState>({});
   const [user, setUser] = useState<User | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
@@ -66,12 +68,16 @@ export default function MyEvents() {
         },
         credentials: "include",
       });
+
+      if (!res.ok) {
+        router.push("/sign-in");
+      }
       const data = await res.json();
       setUser(data.user);
     };
 
     fetchUser();
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     const fetchData = async () => {

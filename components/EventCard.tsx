@@ -8,6 +8,7 @@ import {
 import { Button } from "./ui/button";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface Attendee {
   id: string;
@@ -38,6 +39,7 @@ const EventCard = ({
   attendees: Attendee[];
   onDelete?: (id: string) => void; // <-- add this
 }) => {
+  const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
   const [hasApplied, setHasApplied] = useState(false);
 
@@ -55,6 +57,10 @@ const EventCard = ({
           }
         );
 
+        if (!res.ok) {
+          router.push("/sign-in");
+        }
+
         const user = await res.json();
         const uid = user?.user?.id;
         setUserId(uid);
@@ -70,7 +76,7 @@ const EventCard = ({
     };
 
     fetchUserAndCheck();
-  }, [attendees]);
+  }, [attendees, router]);
 
   const isOwner = userId === owner_id;
 
