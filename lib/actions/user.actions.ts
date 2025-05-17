@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import jwt from "jsonwebtoken";
 
 export const createAccount = async ({
   fullName,
@@ -113,4 +114,20 @@ export const logout = async () => {
   });
 
   redirect("/");
+};
+
+export const getCurrentUser = async () => {
+  const cookieStore = cookies();
+
+  const token = (await cookieStore).get("token")?.value;
+
+  if (!token) return null;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+
+    return { user: decoded };
+  } catch {
+    return null;
+  }
 };

@@ -17,9 +17,18 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "./ui/textarea";
 import MyDatePicker from "./MyDatePicker";
 import { useEventContext } from "@/context/GlobalContext";
+import { getCurrentUser } from "@/lib/actions/user.actions";
 
 interface EventFormProps {
   closeDialog: () => void;
+}
+
+interface User {
+  email: string;
+}
+
+interface UserDetails {
+  user: User;
 }
 
 const formSchema = z.object({
@@ -49,19 +58,27 @@ const EventForm = ({ closeDialog }: EventFormProps) => {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const getUserDetails = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/me`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
+    // const getUserDetails = await fetch(
+    //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/me`,
+    //   {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
 
-        credentials: "include",
-      }
-    );
+    //     credentials: "include",
+    //   }
+    // );
 
-    const userDetails = await getUserDetails.json();
+    const res = await getCurrentUser();
 
+    //  const userDetails = await getUserDetails.json();
+
+    const userDetails = res as UserDetails;
+
+    if (!userDetails.user || !userDetails.user.email) {
+      console.error("User email not found");
+      return;
+    }
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/events/create`,
 

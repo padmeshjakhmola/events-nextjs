@@ -9,6 +9,7 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { getCurrentUser } from "@/lib/actions/user.actions";
 
 interface Attendee {
   id: string;
@@ -16,6 +17,14 @@ interface Attendee {
   email: string;
   is_cancelled: boolean;
   cancellation_reason: string | null;
+}
+
+interface User {
+  id: string;
+}
+
+interface UserDetails {
+  user: User;
 }
 
 const EventCard = ({
@@ -46,21 +55,26 @@ const EventCard = ({
   useEffect(() => {
     const fetchUserAndCheck = async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/me`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          }
-        );
+        // const res = await fetch(
+        //   `${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/me`,
+        //   {
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     credentials: "include",
+        //   }
+        // );
 
-        if (!res.ok) {
+        const res = await getCurrentUser();
+
+        if (!res) {
           router.push("/sign-in");
         }
 
-        const user = await res.json();
+        // const user = await res.json();
+
+        const user = res as UserDetails;
+
         const uid = user?.user?.id;
         setUserId(uid);
 

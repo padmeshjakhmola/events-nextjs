@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
+import { getCurrentUser } from "@/lib/actions/user.actions";
 
 interface Event {
   id: string;
@@ -49,6 +50,13 @@ interface TextAreasState {
   [key: string]: boolean;
 }
 
+interface UserResponse {
+  user: {
+    id: string;
+    name: string;
+  };
+}
+
 export default function MyEvents() {
   const router = useRouter();
   const [openTextAreas, setOpenTextAreas] = useState<TextAreasState>({});
@@ -60,18 +68,21 @@ export default function MyEvents() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/me`, {
-        // method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+      // const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/me`, {
+      //   // method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   credentials: "include",
+      // });
 
-      if (!res.ok) {
+      const res = await getCurrentUser();
+
+      if (!res) {
         router.push("/sign-in");
       }
-      const data = await res.json();
+      const data = res as UserResponse;
+
       setUser(data.user);
     };
 
