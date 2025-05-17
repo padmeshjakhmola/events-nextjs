@@ -7,7 +7,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
-import EventCard from "@/components/EventCard";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +16,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import EventForm from "@/components/EventForm";
+import AllEvents from "@/components/AllEvents";
 
 const Events = () => {
   return (
@@ -69,14 +69,7 @@ const Events = () => {
       </div>
 
       {/* card */}
-      <div className="py-32 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-y-20 justify-items-center">
-        <EventCard />
-        <EventCard />
-        <EventCard />
-        <EventCard />
-        <EventCard />
-        <EventCard />
-      </div>
+      <AllEvents />
     </div>
   );
 };

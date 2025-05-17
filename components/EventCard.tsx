@@ -7,54 +7,75 @@ import {
 import { Button } from "./ui/button";
 import Image from "next/image";
 
-const EventCard = () => {
+const EventCard = ({
+  name,
+  date,
+  description,
+  location,
+  owner,
+}: {
+  name: string;
+  date: string;
+  description: string;
+  location: string;
+  owner: string | null;
+}) => {
   return (
-    <>
-      <Card className="w-[350px] max-h-96 rounded-4xl overflow-hidden py-10">
-        <CardHeader className="">
-          <div className="px-4">
-            <CardTitle className="font-rubik font-light text-3xl h-[60px] line-clamp-2">
-              <div className="flex flex-row justify-between items-center">
-                <h1>Swis Chalet</h1>
-                <Image
-                  src="/assets/icons/delete.svg"
-                  alt="delete"
-                  width={30}
-                  height={30}
-                  className="object-contain cursor-pointer"
-                />
-              </div>
-            </CardTitle>
-            <CardDescription className="py-2 text-lg h-[100px] text-white/80 line-clamp-2">
-              A cozy event where you can meet yourself and friends.
-            </CardDescription>
-            <div className="flex flex-row items-center justify-between py-10 max-w truncate">
-              <div className="flex flex-row justify-center items-center gap-2 overflow-hidden max-w-[150px]">
-                <Image
-                  src="/assets/icons/calendar.svg"
-                  alt="date"
-                  width={30}
-                  height={30}
-                  className="object-cover invert"
-                />
-                <h1 className="truncate">Date</h1>
-              </div>
-              <div className="flex flex-row justify-center items-center gap-2 overflow-hidden max-w-[100px]">
-                <Image
-                  src="/assets/icons/location.svg"
-                  alt="date"
-                  width={20}
-                  height={20}
-                  className="object-cover invert"
-                />
-                <h1 className="truncate">Location</h1>
-              </div>
-            </div>
-            <Button className="w-full cursor-pointer">Attend Event</Button>
+    <Card className="w-[350px] rounded-3xl overflow-hidden bg-white/5 backdrop-blur-md border border-white/10 text-white">
+      <CardHeader className="p-6 space-y-4">
+        <div className="flex justify-between items-center">
+          <CardTitle className="font-rubik text-2xl font-light leading-tight line-clamp-2 pr-2">
+            {name}
+          </CardTitle>
+          <Image
+            src="/assets/icons/delete.svg"
+            alt="delete"
+            width={24}
+            height={24}
+            className="cursor-pointer"
+          />
+        </div>
+
+        <CardDescription className="text-white/80 text-base line-clamp-3">
+          {description}
+        </CardDescription>
+
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <Image
+              src="/assets/icons/calendar.svg"
+              alt="calendar"
+              width={20}
+              height={20}
+              className="invert"
+            />
+            <span className="truncate text-sm">{date}</span>
           </div>
-        </CardHeader>
-      </Card>
-    </>
+          <div className="flex items-center gap-2">
+            <Image
+              src="/assets/icons/location.svg"
+              alt="location"
+              width={18}
+              height={18}
+              className="invert"
+            />
+            <span className="truncate text-sm">{location}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Image
+              src="/assets/icons/profile.svg"
+              alt="profile"
+              width={18}
+              height={18}
+              className="invert"
+            />
+            <span className="truncate text-sm">{owner}</span>
+          </div>
+        </div>
+
+        <Button className="w-full mt-4">Attend Event</Button>
+      </CardHeader>
+    </Card>
   );
 };
 
