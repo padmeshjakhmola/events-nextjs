@@ -18,6 +18,10 @@ import { Textarea } from "./ui/textarea";
 import MyDatePicker from "./MyDatePicker";
 import { useEventContext } from "@/context/GlobalContext";
 
+interface EventFormProps {
+  closeDialog: () => void;
+}
+
 const formSchema = z.object({
   title: z.string().min(2, {
     message: "Title must be at least 2 characters.",
@@ -31,9 +35,8 @@ const formSchema = z.object({
   }),
 });
 
-const EventForm = () => {
+const EventForm = ({ closeDialog }: EventFormProps) => {
   const { refreshEvents } = useEventContext();
-
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,7 +85,8 @@ const EventForm = () => {
     );
 
     await response.json();
-    refreshEvents()
+    refreshEvents();
+    closeDialog();
   }
 
   return (

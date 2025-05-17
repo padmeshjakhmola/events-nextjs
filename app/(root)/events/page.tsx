@@ -1,5 +1,7 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +20,8 @@ import {
 import EventForm from "@/components/EventForm";
 import AllEvents from "@/components/AllEvents";
 
-const Events = async () => {
+const Events = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   return (
     <div className="py-32 px-28">
       <div className="flex flex-row justify-between items-center">
@@ -46,7 +49,7 @@ const Events = async () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Dialog>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button
                 size="lg"
@@ -62,7 +65,7 @@ const Events = async () => {
                   Please fill in the following details to create a new event.
                 </DialogDescription>
               </DialogHeader>
-              <EventForm />
+              <EventForm closeDialog={() => setIsDialogOpen(false)} />
             </DialogContent>
           </Dialog>
         </div>
