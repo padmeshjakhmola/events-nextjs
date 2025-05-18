@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { logout } from "@/lib/actions/user.actions";
 
@@ -12,9 +12,20 @@ const list = [
   { id: 4, name: "My Events", link: "/myevents" },
 ];
 
-const Navbar = ({ token }: { token: string }) => {
+const Navbar = () => {
+
+    const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    setToken(storedToken);
+  }, []);
+
+
   const handleClick = async () => {
-    await logout();
+    await logout(); // This should also remove token from localStorage
+    localStorage.removeItem("token"); // Explicitly remove token on logout
+    setToken(null); // Update state
   };
   return (
     <nav className="flex flex-col justify-center items-center w-full pt-12 text-black">

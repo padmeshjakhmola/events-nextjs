@@ -1,9 +1,3 @@
-"use server";
-
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import jwt from "jsonwebtoken";
-
 export const createAccount = async ({
   fullName,
   email,
@@ -20,7 +14,6 @@ export const createAccount = async ({
       headers: {
         "Content-Type": "application/json",
       },
-
       body: JSON.stringify({
         fullname: fullName,
         email,
@@ -34,19 +27,15 @@ export const createAccount = async ({
   if (!response.ok) {
     return {
       status: response.status,
-      message: "Unable to login",
+      message: "Unable to sign up",
       error: data,
     };
   }
 
-  (await cookies()).set("token", data.token, {
-    httpOnly: true,
-    // secure: process.env.NODE_ENV === "production",
-    secure: true,
-    maxAge: 60 * 60 * 24,
-    path: "/",
-    sameSite: "none",
-  });
+
+  if (typeof window !== "undefined") {
+    localStorage.setItem("token", data.token);
+  }
 
   return {
     status: 200,
@@ -70,11 +59,7 @@ export const signInUser = async ({
       headers: {
         "Content-Type": "application/json",
       },
-
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+      body: JSON.stringify({ email, password }),
     }
   );
 
@@ -88,14 +73,10 @@ export const signInUser = async ({
     };
   }
 
-  (await cookies()).set("token", data.token, {
-    httpOnly: true,
-    // secure: process.env.NODE_ENV === "production",
-    secure: true,
-    maxAge: 60 * 60 * 24,
-    path: "/",
-    sameSite: "none",
-  });
+
+  if (typeof window !== "undefined") {
+    localStorage.setItem("token", data.token);
+  }
 
   return {
     status: 200,
@@ -105,26 +86,24 @@ export const signInUser = async ({
   };
 };
 
-export const logout = async () => {
-  const cookieStore = cookies();
-  (await cookieStore).set("token", "", {
-    httpOnly: true,
-    path: "/",
-    expires: new Date(0),
-  });
-
-  redirect("/");
+export const logout = () => {
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  }
 };
 
-export const getCurrentUser = async () => {
-  const cookieStore = cookies();
+export const getCurrentUser = () => {
+  if (typeof window === "undefined") return null;
 
-  const token = (await cookieStore).get("token")?.value;
+  const token = localStorage.getItem("token");
 
   if (!token) return null;
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    const decoded = JSON.parse(
+      atob(token.split(".")[1]) 
+    );
 
     return { user: decoded };
   } catch {
