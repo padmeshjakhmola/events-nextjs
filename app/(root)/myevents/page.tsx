@@ -78,9 +78,9 @@ export default function MyEvents() {
 
       const res = await getCurrentUser();
 
-      if (!res) {
-        router.push("/sign-in");
-      }
+      // if (!res) {
+      //   router.push("/sign-in");
+      // }
       const data = res as UserResponse;
 
       setUser(data.user);

@@ -67,9 +67,9 @@ const EventCard = ({
 
         const res = await getCurrentUser();
 
-        if (!res) {
-          router.push("/sign-in");
-        }
+        // if (!res) {
+        //   router.push("/sign-in");
+        // }
 
         // const user = await res.json();
 
