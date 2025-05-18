@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🎉 Connectify Events
+Connectify Events is a modern, full-stack event management platform where users can create, manage, and join events effortlessly. With a personalized dashboard, users can track their own events, manage invitations, and control participation. Built for performance and scalability using cutting-edge technologies like Next.js, Node.js, JWT, and PostgreSQL.
 
-## Getting Started
+🚀 Features
+✅ User Authentication (JWT-based)
 
-First, run the development server:
+🎫 Create & Join Events
 
-```bash
+📅 Personalized Event Dashboard
+
+❌ Cancel Invitations
+
+📊 Scalable Architecture with Dockerized Backend
+
+🛠 Tech Stack
+Technology Purpose
+Next.js Frontend framework
+Node.js Backend API server
+PostgreSQL Relational database
+JWT Authentication
+Vercel Frontend deployment
+Cloud Run Backend deployment (Docker)
+Docker Containerized backend
+
+📸 Screenshots
+Add your screenshots here to showcase the UI and features
+
+🔧 Installation
+🖥 Frontend (Next.js)
+bash
+Copy
+Edit
+git clone https://github.com/your-username/connectify-events.git
+cd connectify-events/frontend
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+🛠 Backend (Node.js with Docker)
+bash
+Copy
+Edit
+cd ../backend
+docker build -t connectify-backend .
+docker run -p 5000:5000 connectify-backend
+Or deploy directly to Cloud Run using the Dockerfile.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🔑 Environment Variables
+Frontend (.env.local)
+ini
+Copy
+Edit
+NEXT_PUBLIC_API_URL=https://your-backend-url
+Backend (.env)
+ini
+Copy
+Edit
+PORT=5000
+DATABASE_URL=your_postgresql_connection_url
+JWT_SECRET=your_secret_key
+🌐 Deployment
+Frontend is deployed on Vercel
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Backend is deployed on Google Cloud Run (Dockerized container)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Database is hosted using PostgreSQL
 
-## Learn More
+🤝 Contributing
+Contributions, issues and feature requests are welcome!
 
-To learn more about Next.js, take a look at the following resources:
+Fork the repository
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create your feature branch: git checkout -b feature/your-feature
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Commit your changes: git commit -m 'Add your feature'
 
-## Deploy on Vercel
+Push to the branch: git push origin feature/your-feature
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Open a pull request
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+📩 Contact
+Made with ❤️ by Padmesh Jakhmola
+
+📬 Email: padmeshjakhmola@gmail.com
+🔗 LinkedIn
