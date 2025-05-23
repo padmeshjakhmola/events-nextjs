@@ -67,26 +67,16 @@ export default function MyEvents() {
   );
 
   useEffect(() => {
-    const fetchUser = async () => {
-      // const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/v1/me`, {
-      //   // method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   credentials: "include",
-      // });
-
+    const checkAuth = async () => {
       const res = await getCurrentUser();
-
       if (!res) {
         router.push("/sign-in");
+      } else {
+        const data = res as UserResponse;
+        setUser(data.user);
       }
-      const data = res as UserResponse;
-
-      setUser(data.user);
     };
-
-    fetchUser();
+    checkAuth();
   }, [router]);
 
   useEffect(() => {
@@ -156,7 +146,13 @@ export default function MyEvents() {
     }
   };
 
-  if (!user) return <p className="text-center mt-20">Loading your events...</p>;
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-gray-900"></div>
+      </div>
+    );
+  }
 
   const myEvents = events.filter((event) => event.owner === user.id);
 

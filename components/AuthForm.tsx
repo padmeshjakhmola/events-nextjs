@@ -66,11 +66,14 @@ const AuthForm = ({ type }: { type: FormType }) => {
               password: values.password,
             });
 
-      if (user && typeof user !== "string" && "error" in user) {
-        return setErrorMessage(user.error as string);
+      if (
+        (user && "error" in user && user.error.message === "user_not_found") ||
+        (user && "error" in user && user.error.message === "invalid_password")
+      ) {
+        return setErrorMessage("Incorrect email or password.");
       }
 
-      if (user?.status === 200) {
+      if (user && "status" in user && user.status === 200) {
         router.push("/");
       }
     } catch {
