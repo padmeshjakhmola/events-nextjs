@@ -1,14 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import React, { useState } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import Image from "next/image";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -19,38 +12,41 @@ import {
 } from "@/components/ui/dialog";
 import EventForm from "@/components/EventForm";
 import AllEvents from "@/components/AllEvents";
+import { useRouter } from "next/navigation";
+import { getCurrentUser } from "@/lib/actions/user.actions";
 
 const Events = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const res = await getCurrentUser();
+      if (!res) {
+        router.push("/sign-in");
+      } else {
+        setLoading(false);
+      }
+    };
+    checkAuth();
+  }, [router]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-gray-900"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="py-32 px-28">
-      <div className="flex flex-row justify-between items-center">
-        <h1 className="text-2xl lg:text-4xl text-center font-semibold select-none">
+      <div className="flex flex-col space-y-10 md:space-y-0 md:flex-row justify-between items-center">
+        <h1 className="text-2xl md:text-4xl text-center font-semibold select-none">
           My Events
         </h1>
         <div className="space-x-4 flex">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                size="lg"
-                className="hidden lg:flex text-lg py-6 text-center cursor-pointer select-none bg-[#334155] hover:bg-gray-600"
-              >
-                Sort By
-                <Image
-                  src="/assets/icons/Vector.svg"
-                  width={10}
-                  height={10}
-                  alt="icon"
-                  className="object-contain"
-                />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Accending</DropdownMenuItem>
-              <DropdownMenuItem>Decending</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button
