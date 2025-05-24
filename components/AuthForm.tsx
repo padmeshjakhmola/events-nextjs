@@ -28,7 +28,7 @@ const authFormSchema = (formType: FormType) => {
       formType === "sign-up"
         ? z.string().min(2).max(50)
         : z.string().optional(),
-    password: z.string().min(2).max(50),
+    password: z.string().min(6).max(50),
   });
 };
 
